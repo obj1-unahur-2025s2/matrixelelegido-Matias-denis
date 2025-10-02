@@ -1,4 +1,4 @@
-import bolichito.bolichito-Matias-denis.objetos.*
+
 object neo {
     var energia = 100
     method energia() = energia
