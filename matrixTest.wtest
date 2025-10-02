@@ -1,9 +1,100 @@
+import matrix.*
+describe "Matrix: tests individuales" {
+ test "Neo empieza con 100 de energia y es el elegido" {
+    assert.equals(100,neo.energia())
+    assert.that(neo.esElElegido())
+ }
+ test "Neo pierde la mitad de su energia al saltar y su vitalidad es la décima parte"{
+   neo.energia() = 100
+   neo.saltar()
+   assert.equals(50, neo.energia())
+   assert.equals(5, neo.vitalidad())
+ }
 
+test "Morfeo no es el elegido, empieza descansado y con vitalidad 8"{
+    morfeo.vitalidad()
+    morfeo.estaCansado()
+    assert.notThat(morfeo.esElElegido())
+    assert.equals(8, morfeo.vitalidad())
+    assert.notThat(morfeo.estaCansado())
+  }
+test "Morfeo se cansa al saltar, y si salta cansado vuelve a estar descansado, vitalidad baja en 1 cada vez"{
+    morfeo.vitalidad() = 8
+    morfeo.estaCansado() = false
+    morfeo.saltar()
+    assert.that(morfeo.estaCansado())
+    assert.equals(7, morfeo.vitalidad())
+    morfeo.saltar()
+    assert.notThat(morfeo.estaCansado())
+    assert.equals(6, morfeo.vitalidad())
 
-describe "group of tests " {
-
-  test "test 01" {
-    assert.equals(100, 50+50)
+  
+}
+test "Trinity siempre tiene vitalidad 0, no es elegida y saltar no la afecta"{
+    assert.equals(0, trinity.vitalidad())
+    assert.notThat(trinity.esElElegido())
+    trinity.saltar()
+    assert.equals(0, trinity.vitalidad())
   }
 
+test "La nave empieza sin pasajeros"{
+    assert.equals(0, nave.cantidadDePasajeros())
+  }
+
+test "La nave tiene 3 pasajeros al subir neo, morfeo y trinity"{
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    assert.equals(3, nave.cantidadDePasajeros())
+  }
+
+test "Neo es el pasajero de mayor vitalidad al inicio"{
+    neo.energia() = 100
+    morfeo.vitalidad() = 8
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    assert.equals(neo, nave.pasajeroDeMayorVitalidad()) 
+  }
+
+test "La nave no tiene las vitalidades equilibradas al inicio"{
+    
+    neo.energia() = 100
+    morfeo.vitalidad() = 8
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    assert.notThat(nave.estaEquilibradaEnVitalidad())
+  }
+
+test "La nave tiene al elegido si esta Neo"{
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    assert.that(nave.elElegidoEstaEnLaNave())
+  }
+
+test "la nave no tiene al elegido si no esta Neo"{
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    assert.notThat(nave.elElegidoEstaEnLaNave())
+  }
+
+test "cuando la nave choca, todos saltan y la nave queda vacía"{
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    nave.chocar()
+    assert.equals(0, nave.cantidadDePasajeros())
+  }
+test "cuando la nave acelera, solo los no elegidos saltan y todos permanecen"{
+    neo.subirALaNave()
+    morfeo.subirALaNave()
+    trinity.subirALaNave()
+    nave.acelerar()
+    assert.equals(3, nave.cantidadDePasajeros())
+    assert.equals(7, morfeo.vitalidad()) 
+    assert.equals(100, neo.energia()) 
+  }
 }
+
